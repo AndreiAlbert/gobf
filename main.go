@@ -1,15 +1,10 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/AndreiAlbert/brainfuckgo/lexer"
+	"github.com/AndreiAlbert/brainfuckgo/generators"
 )
 
 func main() {
-	l := lexer.New(">>++--[].abcd[[[]]]")
-	tokens := l.GetTokens()
-	for _, token := range tokens {
-		fmt.Printf("%+v\n", token)
-	}
+	i := generators.New(",.")
+	i.Evaluate()
 }
