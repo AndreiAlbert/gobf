@@ -1,9 +1,9 @@
 package generators
 
 import (
-	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/AndreiAlbert/brainfuckgo/lexer"
 )
@@ -20,7 +20,8 @@ func New(input string) *Interpreter {
 	return &Interpreter{tokens: tokens}
 }
 
-func (i *Interpreter) Evaluate() {
+func (i *Interpreter) Evaluate() strings.Builder {
+	var str strings.Builder
 	for _, token := range i.tokens {
 		switch token.LiteralValue {
 		case lexer.INC_VALUE:
@@ -32,7 +33,7 @@ func (i *Interpreter) Evaluate() {
 		case lexer.DEC_POINTER:
 			i.currPointer--
 		case lexer.OUTPUT:
-			fmt.Printf("%c", rune(i.memory[i.currPointer]))
+			str.WriteString(string(rune(i.memory[i.currPointer])))
 		case lexer.INPUT:
 			buf := make([]byte, 1)
 			_, err := os.Stdin.Read(buf)
@@ -42,4 +43,5 @@ func (i *Interpreter) Evaluate() {
 			i.memory[i.currPointer] = int(buf[0])
 		}
 	}
+	return str
 }
