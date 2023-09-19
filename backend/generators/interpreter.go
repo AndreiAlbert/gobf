@@ -1,6 +1,7 @@
 package generators
 
 import (
+	"bufio"
 	"log"
 	"os"
 	"strings"
@@ -10,7 +11,7 @@ import (
 
 type Interpreter struct {
 	tokens        []lexer.Token
-	memory        [3000]int
+	memory        [3000]uint8
 	memoryPointer int
 	tokenPointer  int
 }
@@ -36,14 +37,14 @@ func (i *Interpreter) Evaluate() strings.Builder {
 		case lexer.DEC_POINTER:
 			i.memoryPointer--
 		case lexer.OUTPUT:
-			str.WriteString(string(rune(i.memory[i.memoryPointer])))
+			str.WriteByte(i.memory[i.memoryPointer])
 		case lexer.INPUT:
-			buf := make([]byte, 1)
-			_, err := os.Stdin.Read(buf)
+			reader := bufio.NewReader(os.Stdin)
+			char, _, err := reader.ReadRune()
 			if err != nil {
-				log.Fatal("Could not read standard input")
+				log.Fatal("could not read from stdin")
 			}
-			i.memory[i.memoryPointer] = int(buf[0])
+			i.memory[i.memoryPointer] = uint8(char)
 		case lexer.LOOP_START:
 			if i.memory[i.memoryPointer] == 0 {
 				loopDepth := 1

@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	i := generators.New("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.")
+	i := generators.New(",[.,]")
 	result := i.Evaluate()
 	fmt.Println(result.String())
 }
