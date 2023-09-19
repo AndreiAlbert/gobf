@@ -55,7 +55,7 @@ func (i *Interpreter) Evaluate() strings.Builder {
 					} else if loopToken.Type == lexer.LOOP_END {
 						loopDepth--
 						if loopDepth == 0 {
-							i.tokenPointer = idx + 1
+							i.tokenPointer = idx
 							break
 						}
 					}
