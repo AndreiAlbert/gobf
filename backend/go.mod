@@ -1,3 +1,5 @@
-module github.com/AndreiAlbert/brainfuckgo
+module github.com/AndreiAlbert/brainf
 
 go 1.20
+
+require github.com/gorilla/mux v1.8.0

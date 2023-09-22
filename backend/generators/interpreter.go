@@ -2,11 +2,12 @@ package generators
 
 import (
 	"bufio"
+	"errors"
 	"log"
 	"os"
 	"strings"
 
-	"github.com/AndreiAlbert/brainfuckgo/lexer"
+	"github.com/AndreiAlbert/brainf/lexer"
 )
 
 type Interpreter struct {
@@ -22,7 +23,7 @@ func New(input string) *Interpreter {
 	return &Interpreter{tokens: tokens}
 }
 
-func (i *Interpreter) Evaluate() strings.Builder {
+func (i *Interpreter) Evaluate() (strings.Builder, error) {
 	var str strings.Builder
 	loopStack := []int{}
 	for i.tokenPointer < len(i.tokens) {
@@ -60,17 +61,26 @@ func (i *Interpreter) Evaluate() strings.Builder {
 						}
 					}
 				}
+				if loopDepth != 0 {
+					return strings.Builder{}, errors.New("No close bracked")
+				}
 			} else {
 				loopStack = append(loopStack, i.tokenPointer)
 			}
 		case lexer.LOOP_END:
 			if i.memory[i.memoryPointer] != 0 {
+				if len(loopStack) == 0 {
+					return strings.Builder{}, errors.New("No close bracked")
+				}
 				i.tokenPointer = loopStack[len(loopStack)-1]
 			} else {
+				if len(loopStack) == 0 {
+					return strings.Builder{}, errors.New("No close bracked")
+				}
 				loopStack = loopStack[:len(loopStack)-1]
 			}
 		}
 		i.tokenPointer++
 	}
-	return str
+	return str, nil
 }
