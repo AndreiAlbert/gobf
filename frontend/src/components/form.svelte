@@ -19,7 +19,6 @@
         const jsonResponse = await response.json();
         console.log(jsonResponse);
     }
-
 </script>
 
 <div>
