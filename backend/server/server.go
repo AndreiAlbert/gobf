@@ -8,6 +8,7 @@ import (
 
 	"github.com/AndreiAlbert/brainf/generators"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 type request struct {
@@ -21,6 +22,9 @@ type response struct {
 
 func processRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
 	var req request
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -52,5 +56,11 @@ func processRequest(w http.ResponseWriter, r *http.Request) {
 func RunServer() {
 	router := mux.NewRouter()
 	router.HandleFunc("/processRequest", processRequest).Methods("POST")
-	http.ListenAndServe(":8080", router)
+	corsOpts := cors.New(cors.Options{
+		AllowedOrigins: []string{"http://localhost:5173"},
+		AllowedMethods: []string{
+			http.MethodPost,
+		},
+	})
+	http.ListenAndServe(":8080", corsOpts.Handler(router))
 }
