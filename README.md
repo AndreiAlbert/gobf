@@ -17,7 +17,7 @@ This project is a simple Brainf*ck interpreter written in Go, wrapped in an HTTP
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/brainfuck-interpreter.git
+   git clone https://github.com/AndreiAlbert/gobf.git
    cd brainfuck-interpreter
    cd backend
    go run main.go
